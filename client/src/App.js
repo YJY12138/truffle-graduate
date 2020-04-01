@@ -168,6 +168,7 @@ getTrans = async () => {
             // reader.readAsDataURL(file);
             if(file!=null)
             reader.readAsArrayBuffer(file)
+            else alert("请先选择文件")
             reader.onloadend = (e) => {
               console.log('这是reader')
               console.log(reader);
