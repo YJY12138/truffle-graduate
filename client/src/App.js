@@ -80,7 +80,7 @@ runExample = async () => {
   //const block=this.state.web3.eth.getBlock(0,true)
   //console.log('这是runexample里的block:'+Object.values(block));
 
-  const flag=await contract.setFile(this.state.currentFilehash.toString(),this.state.fileOwner.toString(),
+  const flag=await contract.setFile(this.state.currentFilehash.toString(),accounts.toString(),
                          { from: accounts[0]}
                          )//默认指定第0个账户可以加上第二个参数{from:accounts[0]}
 
@@ -156,7 +156,8 @@ getTrans = async () => {
            <h3> 选择文件</h3>
            <div>
             <input type="file" ref="file" id="file" name="file" multiple="multiple"/>
-            <input type="txt"  ref="owner" id="owner" name="owner"/>
+            <h3>账户</h3>
+            <input type="txt" size="50" ref="owner" id="owner" name="owner" value={this.state.accounts}/>
            </div>
 
       <div> 
@@ -165,6 +166,7 @@ getTrans = async () => {
             var file = this.refs.file.files[0];
             var reader = new FileReader();
             // reader.readAsDataURL(file);
+            if(file!=null)
             reader.readAsArrayBuffer(file)
             reader.onloadend = (e) => {
               console.log('这是reader')
