@@ -1,17 +1,22 @@
 pragma solidity >=0.4.31 <0.7.0;
 pragma experimental ABIEncoderV2;
 contract SimpleStorage {
-  string[] storedData;
+  struct Filemsg{
+    string filehash;
+    string filename;
+    string owner;
+  }
+  Filemsg[] public storedData;
   uint filenumbers = 0;
-  string owner;
   address user = msg.sender;
-  function setFile(string memory x,string memory y) public  returns(uint) {//x是想要存链的文件的hash,y是上传文件的时候上传的账户
+  function setFilemsg(string memory hash,string memory filename,string memory owner) public  returns(uint) {//x是想要存链的文件的hash,y是上传文件的时候上传的账户
     uint flag = 1;
+    Filemsg  memory temp = Filemsg(hash,filename,owner);
     if(storedData.length>0){
      for(uint i = 0;i < storedData.length ; i ++ ){
-      if(utilCompareInternal(x,storedData[i])==1&&utilCompareInternal(y,owner)==0)//hash值未存在,可以上传
+      if(utilCompareInternal(hash,storedData[i].filehash)==1)//hash值未存在,可以上传
         {
-            storedData.push(x);
+            storedData.push(temp);
             addFilenumber();
             flag = 1;
         }
@@ -21,10 +26,9 @@ contract SimpleStorage {
         }
     }
     else{
-       setOwner(y);
-       storedData.push(x);
+       storedData.push(temp);
        addFilenumber();
-      flag = 1;
+       flag = 1;
     }
     return flag;
 }
@@ -39,29 +43,17 @@ contract SimpleStorage {
     }
     return 0;//说明两个字符串相等
 }
-  function getFile() public view returns (string[] memory){
+  function getFile() public view returns (Filemsg[] memory){
     return storedData;
-  }
-  function setOwner(string memory y)public{
-    owner = y;
-  }
-  function getOwner() public view returns (string memory){
-    return owner;
-  }
-  function getBalance()  public  view returns (uint){
-    return address(this).balance;
   }
   function getBlocknumber()  public  view returns (uint){
     return block.number;
   }
-  function setUser() public  {
-    user = msg.sender;
-  }
-   function getUser()public view returns (address){
-    return msg.sender;
-  }
   function getUserbalance() public view returns (uint){
-    return user.balance;
+    return msg.sender.balance;
+  }
+   function getUser() public view returns (address){
+    return msg.sender;
   }
   function addFilenumber() public  {
    filenumbers ++;

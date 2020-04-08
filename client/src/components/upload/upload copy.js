@@ -1,16 +1,10 @@
 import React, {Component} from 'react'
-import getWeb3 from './getWeb3'
-import SimpleStorageContract from "./contracts/SimpleStorage.json";
+import getWeb3 from '../getWeb3/getWeb3'
+import SimpleStorageContract from "../../contracts/SimpleStorage.json";
 import truffleContract from "truffle-contract";
-import {HashRouter as Router,Route,Link,BrowserRouter  ,Switch,Redirect, HashRouter} from 'react-router-dom';
-import Myfiles from "./components/myfiles/myfiles"
-import Verify from "./components/verify/verify"
 import { Button } from 'antd';
-import './App.css';
 const ipfsAPI = require('ipfs-api');
 const ipfs = ipfsAPI({host: 'localhost', port: '5001', protocol: 'http'});
-
-
 //把文件存到ipfs
 let saveImageOnIpfs = (reader) => {
   return new Promise(function(resolve, reject) {
@@ -24,10 +18,6 @@ let saveImageOnIpfs = (reader) => {
     })
   })
 }
-const style={
- 
-};
-
 class App extends Component {
   constructor(props) {
     super(props)
@@ -189,16 +179,10 @@ uploadFiles = async ()=>{
 }
 
   render() {
-
-
     if (!this.state.web3) {
-    
       return <div>Loading Web3, accounts, and contract...</div>;
     }
     return (<div className="App" align="center">
-           <HashRouter>
-             <span>这里是hashruter</span>
-           </HashRouter>
            <Button type="primary">button</Button>
         <h1><span>上传图片到IPFS</span></h1>
            <h3><span>选择文件</span></h3>
