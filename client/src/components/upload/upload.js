@@ -103,10 +103,8 @@ operateContract = async () => {
  }else{
    console.log("文件已经存在")
  }
-   ethaddress();
-  console.log("当前账户："+this.state.currentfileowner.toString()+"交易数目：")
-  await this.state.web3.eth.getTransactionCount( this.state.currentfileowner.toString()).then(console.log);
-  console.log("----------------------------------")
+   //ethaddress();
+ 
   var filecounts= await contract.getFilenumber();//取得区块链上面文件的数量
 
   const transaction=this.state.web3.eth.getTransaction(this.state.blockNumber, 0).then(

@@ -67,7 +67,7 @@ export default class myfiles extends Component {
                 age: dataContain.data[3][i][0],
                 address: 'http://localhost:8080/ipfs/'+dataContain.data[3][i][0],
               }
-              data[i]=temp;   
+              data[data.length]=temp;   
               }
          }
      setTimeout(()=>{
@@ -91,7 +91,7 @@ export default class myfiles extends Component {
                     age: dataContain.data[3][i][0],
                     address: 'http://localhost:8080/ipfs/'+dataContain.data[3][i][0],
                   }
-                  data[i]=temp;    
+                  data[data.length]=temp;    
                 }          
           }
           this.setState({
