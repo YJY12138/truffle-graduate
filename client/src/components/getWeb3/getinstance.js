@@ -7,10 +7,9 @@ const getinstance =  async () =>{
         const web3 = await getWeb3()
         const accounts = await web3.eth.getAccounts()
         const Contract = await truffleContract(SimpleStorageContract)
-       await  Contract.setProvider(web3.currentProvider)
+        await  Contract.setProvider(web3.currentProvider)
         // 返回已经部署的合约
-        const instance = await Contract.deployed()
-        
+        const instance = await Contract.deployed()      
         const filehashs =await instance.getFile()
         var results=[instance,web3,accounts,filehashs]
 

@@ -4,6 +4,8 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import App2 from './components/upload/upload';
 import Layout from"./components/layout"
+import Welconme from"./components/welcome/welcome"
+import EthAddress from "./components/test/ethAddress"
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(<Layout />, document.getElementById('root'));

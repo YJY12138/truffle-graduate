@@ -1,71 +1,237 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import getWeb3 from '../getWeb3/getWeb3'
+import getinstance from '../getWeb3/getinstance'
 import SimpleStorageContract from "../../contracts/SimpleStorage.json";
 import truffleContract from "truffle-contract";
+import { Button ,message} from 'antd';
+import dataContain from '../dataContain'
+import { resolveOnChange } from 'antd/lib/input/Input';
 const ipfsAPI = require('ipfs-api');
 const ipfs = ipfsAPI({host: 'localhost', port: '5001', protocol: 'http'});
-//验证所有权页面
-//用户选择文件,点击验证
-//从区块链上查询文件的hash
-//如果当前用户上传的文件的hash已经存在,那么弹窗显示  该文件已经存在, 文件所有者为...xxxx
-
-export default class verify extends Component {
-    constructor(props){
-        super(props)
-        this.state={
-            user:null,//当前的用户
-            currentfilehash:null
-        }
-    }
-
-    componentWillMount = async () => {
-        try {
-          const web3 = await getWeb3()
-          const accounts = await web3.eth.getAccounts()
-          const Contract = truffleContract(SimpleStorageContract)
-          Contract.setProvider(web3.currentProvider)
-          // 返回已经部署的合约
-          const instance = await Contract.deployed()
-          this.setState({
-              web3: web3,
-              accounts: accounts,
-              contract: instance,//已经部署的合约放到state中
-              blockNumber: web3.eth.blockNumber,
-            },
-            () => {
-              console.log('设置完state之后的回调函数')
-              console.log('web3             :' + this.state.web3)
-              console.log('accounts         :' + this.state.accounts)
-              console.log('contract address :' + instance.address)
-              console.log('currentFilehash  :' + this.state.curretFilehash)
-              console.log('blockNumber      :' + this.state.blockNumber) 
-            }
-            // this.runExample
-          )
-        } catch (error) {
-          console.log('this is error :' + error)
-        }
-      }
-
-    render() {
-        return (
-            <div >
-                <h1><span>这是验权页面</span></h1>
-                <h1><span>这是验权页面</span></h1>
-                <h1><span>这是验权页面</span></h1>
-                <h1><span>这是验权页面</span></h1>
-                <h1><span>这是验权页面</span></h1>
-                <h1><span>这是验权页面</span></h1>
-                <h1><span>这是验权页面</span></h1>
-                <h1><span>这是验权页面</span></h1>
-                <h1><span>这是验权页面</span></h1>
-                <h1><span>这是验权页面</span></h1>
-                <h1><span>这是验权页面</span></h1>
-                <h1><span>这是验权页面</span></h1>
-                <h1><span>这是验权页面</span></h1>
-          
-                
-            </div>
-        )
-    }
+//把文件存到ipfs
+let saveImageOnIpfs = (reader) => {
+  return new Promise(function(resolve, reject) {
+    const buffer = Buffer.from(reader.result);
+    ipfs.add(buffer).then((response) => {
+      console.log(response)
+      resolve(response[0].hash);
+    }).catch((err) => {
+      console.error(err)
+      reject(err);
+    })
+  })
 }
+class App extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      contract:null,
+      web3:   null,
+      accounts:null,
+      filehashs:[],
+      blockNumber:'unknown',
+      currentransaction:'unknown',
+      filehashs:[],//从合约取出的所有的文件的信息
+      filecounts:0,//从合约中取出的文件个数
+      //当前文件的所有者,文件名,文件hash
+      currentfileowner:null,
+      currentfilename:null,
+      currentfilehash:null,
+    }
+  }
+fun2=()=>{
+  setTimeout(()=>{
+    this.setState({
+      contract: dataContain.data[0],//已经部署的合约放到state中
+      web3:     dataContain.data[1],
+      accounts: dataContain.data[2],
+      filehashs:dataContain.data[3],
+    })
+  },600)
+}
+componentWillMount = async () => {
+  try {  
+       if(this.state.contract===null){
+         this.fun2()
+       }
+          this.setState({
+          contract: dataContain.data[0],//已经部署的合约放到state中
+          web3:     dataContain.data[1],
+          accounts: dataContain.data[2],
+          filehashs:dataContain.data[3],
+        },
+          () => {
+            if(this.state.contract){
+            console.log('这是upload中设置完state之后的回调函数')
+            console.log('contract address :' + this.state.contract.address)
+            console.log('web3             :' + this.state.web3)
+            console.log('accounts         :' + this.state.accounts)
+            console.log('filehashs        :' +this.state.filehashs)
+            console.log('文件数量          :' +this.state.filecounts)
+            }else{          
+            }
+          })    
+          setTimeout(this.changeHeight, 0);
+        
+     }catch (error) {
+      console.log('this is error :' + error)
+  }
+}
+//将文件存到链上,以及从链上获取信息
+operateContract = async () => {
+  console.log('进入operateContract')
+  const contract = dataContain.data[0] //我们已经部署好的合约,{账户,合约}
+  console.log('this is contract :' + contract)
+  const accounts = dataContain.data[2]
+  console.log('this is accounts :' + accounts)
+  this.fun1()
+
+  //先拿到合约里面的文件信息,看是否存在当前的hash
+  var response_1 = await contract.getFile()
+  console.log("这是当前hash :" +this.state.currentfilehash)
+  console.log("这是长度 : "+response_1.length+"  这是存文件之前合约里的文件信息 :"+ response_1[response_1.length-1])
+
+ if(await this.hashExistorNot()===1){//当前文件还未存链
+  alert("该文件未存在系统中")
+ }else{
+   alert("该文件已经存在,所有者为"+this.state.accounts)
+ }
+  var filecounts= await contract.getFilenumber();//取得区块链上面文件的数量
+
+  const transaction=this.state.web3.eth.getTransaction(this.state.blockNumber, 0).then(
+                                             data=>{if(data!=null)
+                                                     console.log(data)
+                                                    else console.log('data为空')
+                                                    }
+                                                  )
+  response_1 = await contract.getFile()
+
+  console.log("这是长度："+response_1.length+"这是存文件之后合约里最新的文件信息 ："+ response_1[response_1.length-1])
+
+  const blockNumber=await contract.getBlocknumber()
+
+  this.setState({
+      blockNumber:blockNumber,
+      filecounts:filecounts,
+      filehashs:response_1,
+      currentransaction:transaction,
+    },
+    () => {
+      console.log('---------operateContract之后的数据--------------')
+      console.log('web3             :' + Object.values(this.state.web3))
+      console.log('accounts         :' + this.state.accounts)
+      console.log('contract address :' + this.state.contract.address)
+      console.log('blockNumber      :' + this.state.blockNumber)
+      console.log('transaction      :' + this.state.currentransaction)
+      console.log('文件数量          :' + this.state.filecounts)
+      console.log('-----------------------------------------------')
+    }
+  )
+  this.getTrans()
+}
+hashExistorNot= async () =>{
+    
+    console.log("进入hashExitorNot")
+    
+    let flag=1;//表示hash还未存在
+   
+    const currenthash=this.state.currentfilehash
+   
+    const existhashs= await this.state.filehashs
+    if(existhashs.length===0) {
+      console.log("existhahs为空")
+      return flag;
+    }else{
+      for(var i=0;i<existhashs.length;i++){
+            if(existhashs[i][0]===currenthash){
+              flag = 0;
+              return flag;
+            }
+      } 
+      return flag; 
+    }     
+}
+
+getTrans = async () => {
+  console.log("这是函数中返回的交易信息：")
+  const blocknumber=this.state.blockNumber
+  await this.state.web3.eth.getTransactionFromBlock(blocknumber, 0, function(error, result) {
+    if(result!==null)console.log(result)
+  });
+
+}
+uploadFiles = async ()=>{
+
+  
+  var file = this.refs.file.files[0];
+  var filename=this.refs.file.value.toString().split('\\')[2];
+  var reader = new FileReader();
+  // reader.readAsDataURL(file);
+  if(await file!=null)
+   reader.readAsArrayBuffer(file)
+  else alert("请先选择文件")
+  reader.onloadend = (e) => {
+    console.log('这是reader')
+    console.log(reader);
+    // 上传数据到IPFS
+      saveImageOnIpfs(reader).then((hash) => {             
+      this.setState({currentfilehash: hash,currentfilename:filename,contract:dataContain.data[0],accounts:dataContain.data[2],web3:dataContain.data[1],filehashs:dataContain.data[3]},this.operateContract)
+    });
+
+  }
+}
+fun1 = async ()=>{
+ 
+   console.log("查看dataContain中的信息 :"+dataContain.data[0])
+   console.log("查看dataContain中的信息 :"+dataContain.data[1])
+   console.log("查看dataContain中的信息 :"+dataContain.data[2])
+   console.log("查看dataContain中的信息 :"+dataContain.data[3])
+   if(!dataContain.data){
+        const instance = await getinstance();
+        dataContain.data =instance;
+   }else{
+
+  }
+}
+  render() {
+ 
+    if (!this.state.web3) {
+      return <div>Loading Web3, accounts, and contract...</div>;
+    }else{
+    
+    return (<div className="App" align="center" >
+        <h1><span>上传文件</span></h1>
+         
+           <div>
+            <input type="file" ref="file" id="file" name="file" multiple="multiple"/>
+            <button onClick={this.uploadFiles}>提交文件</button>
+           </div>
+
+    
+      {
+        //如果拿到了图片存在ipfs的hash就显示链接,否则不显示
+        this.state.currentFilehash
+          ? <div id="out">   
+               <div id="lift" > 
+                  <h4>{"http://localhost:8080/ipfs/" + this.state.currentFilehash}</h4>
+                  {/*<h4>从合约返回的文件hash值: {this.state.hashFromContracts}</h4>*/}
+                  <h4>文件列表</h4>        
+                  <ul>{this.state.filehashs.map(function(val){
+                      return <li >http://localhost:8080/ipfs/{val}</li>
+                  })}
+                  </ul>
+                </div>
+              <div  id="right" >
+              <img alt="yjy" style={{
+                  width: 200,height:200
+                }} src={"http://localhost:8080/ipfs/" + this.state.currentFilehash}/>
+               </div>
+            </div>
+          : <img alt="" />
+      }
+    </div>);
+  }
+}
+}
+
+export default App

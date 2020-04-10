@@ -1,0 +1,36 @@
+.logo {
+    width: 120px;
+    height: 31px;
+    background:url(../image/logo.png);
+    margin: 16px 24px 16px 0;
+    float: left;
+    background-size:contain;
+  }
+.outbox{
+
+  overflow:auto;
+  height: 670px;
+}
+.App{
+  position: relative;
+  
+  top: 100px;
+}
+#filebox{
+  position: relative;
+  
+  top: 40px;
+}
+#right{
+    
+  position: absolute;
+    background:#FFF;
+    height:630px;
+    width:100%;
+    position:absolute;
+
+}
+#imgbox{
+  position: relative;
+  //overflow: hidden;
+}
