@@ -212,7 +212,7 @@ handleclick=async(e)=>{
     }else{
     
     return (<div className="App" align="center" >
-         <Button type="primary"   onClick={(event)=>this.handleclick(event)}>lalal</Button>
+        {/* <Button type="primary"   onClick={(event)=>this.handleclick(event)}>lalal</Button>*/}
         <h1><span>验证文件</span></h1>
            <h3><span>选择文件</span></h3>
            <div>

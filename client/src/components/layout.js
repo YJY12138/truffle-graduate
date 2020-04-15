@@ -1,15 +1,14 @@
-import React, { Component } from 'react'
+import React, {ReactDOM, Component } from 'react'
+import Myfiles from "./myfiles/myfiles"
 import {HashRouter,Route,Link,BrowserRouter,Switch,Redirect} from 'react-router-dom';
 import createBrowserHistory from "history/createBrowserHistory";
-import Myfiles from "./myfiles/myfiles"
 import Upload from "./upload/upload"
 import Verify from "./verify/verify"
 import getinstance from './getWeb3/getinstance'
-import Welcome from "./welcome/welcome"
-import {Layout, Menu }from 'antd'
-import styles from '../css/layout.scss'
-import 'antd/dist/antd.css'
 import dataContain from './dataContain'
+import { Button } from 'antd'
+import {Layout, Menu} from 'antd';
+import { MailOutlined, AppstoreOutlined, SettingOutlined } from '@ant-design/icons';
 const {Header, Footer, Content } = Layout;
 const customHistory = createBrowserHistory();
 export default class layout extends Component {
@@ -49,47 +48,47 @@ export default class layout extends Component {
         console.log('this is error :' + error)
       }
     }
+     
+  
+  handleClick =(id) => {
+
+  };
+
     render() {
         return (
-            <HashRouter   history={customHistory}>
-            <Layout className="layout" style={{height: '100%'}}>
-            <Header>
-              <div className="logo"/>
- 
-              <Menu theme="dark" mode="horizontal" defaultSelectedKeys={[window.location.hash.split('/')[1]]}>{/*保证f5之后地址栏和选项对应 */}
-                <Menu.Item key="welcome">
-                <Link to="/welcome">首页</Link>
-                </Menu.Item>
-                <Menu.Item key="upload">
-                <Link to="/upload">上传文件</Link>
-                </Menu.Item>
-                <Menu.Item key="myfiles">
-                <Link to="/myfiles">我的文件</Link>
-                </Menu.Item>
-                <Menu.Item key="verify">
-                <Link to="/verify">文件验权</Link>
-                </Menu.Item>
-                <Menu.Item key="id">
-                <Link >{this.state.accounts}</Link>
-                </Menu.Item>
-              </Menu>
-            </Header>
-            {/*中间内容区 */}
-            <Content style={{ padding: '0 50px' }}>
-              
-              <div className="outbox">
+          <HashRouter   history={customHistory}>
+          <Layout className="layout" style={{height: '100%'}}>
+          <Header>
+            <div className="logo"/>
+            <Menu theme="dark" mode="horizontal" defaultSelectedKeys={[window.location.hash.split('/')[1]]}>{/*保证f5之后地址栏和选项对应 */}
              
-              <Route path = "/welcome"  component={Welcome}></Route>
-              <Route path = "/upload"  component={Upload}></Route>
-              <Route path = "/myfiles" component={Myfiles}></Route>
-              <Route path = "/verify" component={Verify}></Route>
-              </div>
+              <Menu.Item key="upload">
+              <Link to="/upload">上传文件</Link>
+              </Menu.Item>
 
-            </Content>
-            <Footer style={{ textAlign: 'center' }}>Created by YJY</Footer>
-          </Layout>
-          </HashRouter>
+              <Menu.Item key="myfiles">
+              <Link to="/myfiles">我的文件</Link>
+              </Menu.Item>
+
+              <Menu.Item key="verify">
+              <Link to="/verify">文件验权</Link>
+              </Menu.Item>
+            </Menu>
+          </Header>
+          {/*中间内容区 */}
+          <Content style={{ padding: '0 50px' }}>
+            
+           <div className="outbox">
+            <Route path = "/upload"  component={Upload}></Route>
+            <Route path = "/myfiles" component={Myfiles}></Route>
+            <Route path = "/verify" component={Verify}></Route>
+            </div>
+
+          </Content>
+         
+        </Layout>
+        </HashRouter>
         )
     }
-}
- 
+
+ }

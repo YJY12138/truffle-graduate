@@ -8,6 +8,7 @@ import dataContain from '../dataContain'
 import { resolveOnChange } from 'antd/lib/input/Input';
 import ethaddress from '../test/ethAddress'
 import searchfile from '../test/searchfile'
+import style from "./css/uploadcss.scss"
 const ipfsAPI = require('ipfs-api');
 const ipfs = ipfsAPI({host: 'localhost', port: '5001', protocol: 'http'});
 //把文件存到ipfs
@@ -54,7 +55,7 @@ fun2=()=>{
 componentWillMount = async () => {
   try {  
        if(this.state.contract===null){
-         this.fun2()
+        await this.fun2()
        }
           this.setState({
           contract: dataContain.data[0],//已经部署的合约放到state中
@@ -214,8 +215,8 @@ handleclick=async(e)=>{
       return <div>Loading Web3, accounts, and contract...</div>;
     }else{
     
-    return (<div className="App" align="center" >
-         <Button type="primary"   onClick={(event)=>this.handleclick(event)}>lalal</Button>
+    return (<div className="upload" align="center" id="upload" >
+        {/*  <Button type="primary"   onClick={(event)=>this.handleclick(event)}>lalal</Button>  */}
         <h1><span>上传图片到IPFS</span></h1>
            <h3><span>选择文件</span></h3>
            <div>

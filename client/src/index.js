@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom';
 
 import App from './App';
 import App2 from './components/upload/upload';
-import Layout from"./components/layout"
+import Layout from "./components/layout"
+import Layout_2 from "./components/layouts/layout_2"
 import Welconme from"./components/welcome/welcome"
 import EthAddress from "./components/test/ethAddress"
 import * as serviceWorker from './serviceWorker';
