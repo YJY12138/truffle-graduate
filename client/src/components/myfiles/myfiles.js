@@ -6,6 +6,7 @@ import dataContain from "../dataContain"
 import getinstance from "../getWeb3/getinstance"
 import { Table, Button,message } from 'antd';
 import { DownloadOutlined } from '@ant-design/icons';
+import style from "./myfiles.scss"
 const ipfsAPI = require('ipfs-api');
 const ipfs = ipfsAPI({host: 'localhost', port: '5001', protocol: 'http'});
 //查询用户的所有文件,并且提供下载按钮
@@ -169,8 +170,7 @@ dowloadfile=async(event,api_url)=>{//下载文件
           key: 'action',
           render: (text, record) => (
             <span>
-              <Button type="primary" shape="round" icon={<DownloadOutlined />} size={'small'} onClick={e=>{this.dowloadfile(e,record.address.toString())}}></Button>
-            
+              <Button type="primary" shape="round" icon={<DownloadOutlined />} size={'small'} onClick={e=>{this.dowloadfile(e,record.address.toString());return false}}></Button>
             </span>
           ),
           align:'center'
@@ -178,7 +178,7 @@ dowloadfile=async(event,api_url)=>{//下载文件
       ];
 
         return (
-            <div id="filebox" style={{overflow:'auto'}}>
+            <div  className="myfiles" id="filebox" style={{overflow:'auto'}}>
              <Table   pagination={{ position: [this.state.bottom] ,defaultPageSize:5}} tableLayout={'fixed'} size={'small'} defaultPageSize={6} columns={columns} dataSource={this.state.data} />
             </div>
 

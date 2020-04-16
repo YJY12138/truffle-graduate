@@ -173,7 +173,7 @@ getTrans = async () => {
 }
 uploadFiles = async ()=>{
 
-  var ownerinfo=this.refs.owner.value.toString();
+  var ownerinfo=this.state.accounts;
   var file = this.refs.file.files[0];
   var filename=this.refs.file.value.toString().split('\\')[2];
   var reader = new FileReader();
@@ -216,39 +216,38 @@ handleclick=async(e)=>{
     }else{
     
     return (<div className="upload" align="center" id="upload" >
-        {/*  <Button type="primary"   onClick={(event)=>this.handleclick(event)}>lalal</Button>  */}
-        <h1><span>上传图片到IPFS</span></h1>
-           <h3><span>选择文件</span></h3>
-           <div>
-            <input type="file" ref="file" id="file" name="file" multiple="multiple"/>
-            <h3>账户</h3>
-            <input type="txt" size="50" ref="owner" id="owner" name="owner"  />
+        <div className="select1">
+           <div className="select2">
+           <h3>当前账户：</h3>
+            <span type="txt" size="50" ref="owner" id="owner" className="owner" >{this.state.accounts}</span>
+           <h1><span>上传文件</span></h1>
+            <input type="file" ref="file" id="file" className="file" multiple="multiple"/> <button onClick={this.uploadFiles}>提交文件</button>
+    
+            <br></br>
+            
            </div>
-
-      <div> 
-        <button onClick={this.uploadFiles}>提交文件</button>
-      </div>
+       </div>
+      <div className="displ">
       {
-        //如果拿到了图片存在ipfs的hash就显示链接,否则不显示
-        this.state.currentFilehash
+        
+        this.state.currentfilehash
           ? <div id="out">   
                <div id="lift" > 
-                  <h4>{"http://localhost:8080/ipfs/" + this.state.currentFilehash}</h4>
-                  {/*<h4>从合约返回的文件hash值: {this.state.hashFromContracts}</h4>*/}
-                  <h4>文件列表</h4>        
-                  <ul>{this.state.filehashs.map(function(val){
+                  <h4>{"http://localhost:8080/ipfs/" + this.state.currentfilehash}</h4>                       
+                 {/* <ul>{this.state.filehashs.map(function(val){
                       return <li >http://localhost:8080/ipfs/{val}</li>
                   })}
-                  </ul>
+                  </ul>*/}
                 </div>
               <div  id="right" >
               <img alt="yjy" style={{
                   width: 200,height:200
-                }} src={"http://localhost:8080/ipfs/" + this.state.currentFilehash}/>
+                }} src={"http://localhost:8080/ipfs/" + this.state.currentfilehash}/>
                </div>
             </div>
           : <img alt="" />
       }
+      </div>
     </div>);
   }
 }

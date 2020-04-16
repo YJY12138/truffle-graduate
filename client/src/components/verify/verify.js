@@ -8,6 +8,7 @@ import dataContain from '../dataContain'
 import { resolveOnChange } from 'antd/lib/input/Input';
 import ethaddress from '../test/ethAddress'
 import searchfile from '../test/searchfile'
+import style from './verify.scss'
 const ipfsAPI = require('ipfs-api');
 const ipfs = ipfsAPI({host: 'localhost', port: '5001', protocol: 'http'});
 //把文件存到ipfs
@@ -211,7 +212,7 @@ handleclick=async(e)=>{
       return <div>Loading Web3, accounts, and contract...</div>;
     }else{
     
-    return (<div className="App" align="center" >
+    return (<div className="verify" align="center" id="verify" >
         {/* <Button type="primary"   onClick={(event)=>this.handleclick(event)}>lalal</Button>*/}
         <h1><span>验证文件</span></h1>
            <h3><span>选择文件</span></h3>
@@ -222,21 +223,16 @@ handleclick=async(e)=>{
 
       {
         //如果拿到了图片存在ipfs的hash就显示链接,否则不显示
-        this.state.currentFilehash
+        this.state.currentfilehash
           ? <div id="out">   
                <div id="lift" > 
-                  <h4>{"http://localhost:8080/ipfs/" + this.state.currentFilehash}</h4>
-                  {/*<h4>从合约返回的文件hash值: {this.state.hashFromContracts}</h4>*/}
-                  <h4>文件列表</h4>        
-                  <ul>{this.state.filehashs.map(function(val){
-                      return <li >http://localhost:8080/ipfs/{val}</li>
-                  })}
-                  </ul>
+                  <h4>{"http://localhost:8080/ipfs/" + this.state.currentfilehash}</h4>
                 </div>
+                
               <div  id="right" >
               <img alt="yjy" style={{
                   width: 200,height:200
-                }} src={"http://localhost:8080/ipfs/" + this.state.currentFilehash}/>
+                }} src={"http://localhost:8080/ipfs/" + this.state.currentfilehash}/>
                </div>
             </div>
           : <img alt="" />

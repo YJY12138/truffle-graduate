@@ -1,10 +1,30 @@
 .upload{
   
+
+    background-color: #bbffaa;
     height: 100%;
 }
 .outbox{
     position: relative;
-
+    height: 60%;
+    top: 100px;
+}
+.select1{
+    float: left;
+    position: relative;
     height: 100%;
-    top:150px;
+    width: 50%;
+    background-color: brown;  
+}
+.select2{
+   position: relative;
+   top:100px;
+}
+.displ{
+    float: right;
+    background-color: skyblue;
+    width: 50%;
+    height: 100%;
+    margin:auto ;
+
 }

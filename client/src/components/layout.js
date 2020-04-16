@@ -9,6 +9,7 @@ import dataContain from './dataContain'
 import { Button } from 'antd'
 import {Layout, Menu} from 'antd';
 import { MailOutlined, AppstoreOutlined, SettingOutlined } from '@ant-design/icons';
+import style from "../css/layout.scss"
 const {Header, Footer, Content } = Layout;
 const customHistory = createBrowserHistory();
 export default class layout extends Component {
@@ -73,11 +74,14 @@ export default class layout extends Component {
               <Menu.Item key="verify">
               <Link to="/verify">文件验权</Link>
               </Menu.Item>
+           
             </Menu>
+         
+           
           </Header>
           {/*中间内容区 */}
           <Content style={{ padding: '0 50px' }}>
-            
+          <div className="account">当前账户:{this.state.accounts}</div>
            <div className="outbox">
             <Route path = "/upload"  component={Upload}></Route>
             <Route path = "/myfiles" component={Myfiles}></Route>
