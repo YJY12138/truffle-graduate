@@ -213,7 +213,7 @@ handleclick=async(e)=>{
     }else{
     
     return (<div className="verify" align="center" id="verify" >
-        {/* <Button type="primary"   onClick={(event)=>this.handleclick(event)}>lalal</Button>*/}
+      
         <h1><span>验证文件</span></h1>
            <h3><span>选择文件</span></h3>
            <div>
@@ -221,7 +221,7 @@ handleclick=async(e)=>{
             <button onClick={this.uploadFiles}>提交文件</button>
            </div>
 
-      {
+      {/*
         //如果拿到了图片存在ipfs的hash就显示链接,否则不显示
         this.state.currentfilehash
           ? <div id="out">   
@@ -236,7 +236,7 @@ handleclick=async(e)=>{
                </div>
             </div>
           : <img alt="" />
-      }
+     */}
     </div>);
   }
 }

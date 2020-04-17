@@ -6,12 +6,14 @@ import Upload from "../upload/upload"
 import Verify from "../verify/verify"
 import getinstance from '../getWeb3/getinstance'
 import Welcome from "../welcome/welcome"
-import {Layout, Menu }from 'antd'
-import styles from '../../css/layout.scss'
+import {Layout, Menu, Button }from 'antd'
+import styles from '../../components/layouts/css/layout.scss'
 import 'antd/dist/antd.css'
 import dataContain from '../dataContain'
+import $ from  'jquery'
 const {Header, Footer, Content } = Layout;
 const customHistory = createBrowserHistory();
+var instance
 export default class layout extends Component {
     constructor(props){
       super(props);
@@ -25,7 +27,6 @@ export default class layout extends Component {
     componentWillMount = async () => {
       try {
         console.log("进入layout的初始化函数")
-        var instance
         if(!this.state.contract){//说明当前没有拿到合约实例
          instance = await getinstance()//调用函数，拿到合约实例
          dataContain.data=instance//将合约实例保存到datacontain中
@@ -49,43 +50,45 @@ export default class layout extends Component {
         console.log('this is error :' + error)
       }
     }
+    changstate=(e)=>{
+         this.setState({
+            filehashs:e.target.value
+         })
+    }
+    handleclick=(i)=>{
+       this.transer(i)
+    }
+     transer=(i)=>{
+      var cur = document.getElementById(i);
+      this.getPosition(cur);
+    }
+     getPosition=(e)=> {
+      　　var t=e.offsetTop;
+      　　var l=e.offsetLeft;
+      　　while(e=e.offsetParent){
+      　　　　t+=e.offsetTop-40;
+      　　　　l+=e.offsetLeft;
+      　　}
+      　$("html,body").animate({scrollTop:t},300);
+      }
     render() {
         return (
-            <HashRouter   history={customHistory}>
-            <Layout className="layout" style={{height: '100%'}}>
-            <Header>
-              <div className="logo"/>
-              <Menu theme="dark" mode="horizontal" defaultSelectedKeys={[window.location.hash.split('/')[1]]}>{/*保证f5之后地址栏和选项对应 */}
-                {/*<Menu.Item key="welcome">
-               <Link to="/welcome">首页</Link>
-                </Menu.Item>*/}
-                <Menu.Item key="upload">
-                <Link to="/upload">上传文件</Link>
-                </Menu.Item>
-                <Menu.Item key="myfiles">
-                <Link to="/myfiles">我的文件</Link>
-                </Menu.Item>
-                <Menu.Item key="verify">
-                <Link to="/verify">文件验权</Link>
-                </Menu.Item>
-                <Menu.Item key="id">
-                <Link >{this.state.accounts}</Link>
-                </Menu.Item>
-              </Menu>
-            </Header>
-            {/*中间内容区 */}
-            <Content style={{ padding: '0 50px' }}>
+          <div className="outer">
+            <div className="divlayout">
+         
+             <div className="layout-upload"><Button  className="but" type="primary" onClick={(e)=>{this.handleclick("div1",e)}}>上传文件</Button></div>
+             <div className="layout-myfile"><Button  className="but" type="primary" onClick={(e)=>{this.handleclick("div2",e)}}>我的文件</Button></div>
+             <div className="layout-verify"><Button  className="but" type="primary" onClick={(e)=>{this.handleclick("div3",e)}}>文件验权</Button></div>
               
-             <div className="outbox">
-              <Route path = "/welcome"  component={Welcome}></Route>
-              <Route path = "/upload"  component={Upload}></Route>
-              <Route path = "/myfiles" component={Myfiles}></Route>
-              <Route path = "/verify" component={Verify}></Route>
-              </div>
-            </Content>
-            <Footer style={{ textAlign: 'center' }}>Created by YJY</Footer>
-          </Layout>
-          </HashRouter>
+            </div>
+            <div className="accountinfo">{this.state.accounts}</div>
+            <div className="footer"><span className="footerspan"><h3>Create by yjy</h3></span></div>
+            <div className="contents">
+            <div className="div1" id="div1"><Upload  files={this.state.filehashs} account={this.state.accounts}></Upload></div>
+            <div className="div2" id="div2"><Myfiles files={this.state.filehashs} account={this.state.accounts}></Myfiles></div>
+            <div className="div3" id="div3"><Verify  files={this.state.filehashs}></Verify></div>
+            </div>
+          </div>
         )
     }
 }

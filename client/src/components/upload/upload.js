@@ -9,6 +9,7 @@ import { resolveOnChange } from 'antd/lib/input/Input';
 import ethaddress from '../test/ethAddress'
 import searchfile from '../test/searchfile'
 import style from "./css/uploadcss.scss"
+import moment from 'moment';
 const ipfsAPI = require('ipfs-api');
 const ipfs = ipfsAPI({host: 'localhost', port: '5001', protocol: 'http'});
 //把文件存到ipfs
@@ -24,7 +25,9 @@ let saveImageOnIpfs = (reader) => {
     })
   })
 }
+var outflag=0;
 class App extends Component {
+
   constructor(props) {
     super(props)
     this.state = {
@@ -101,6 +104,7 @@ operateContract = async () => {
                          )//默认指定第0个账户可以加上第二个参数{from:accounts[0]}
    await message.success('上传成功')
    dataContain.data[3]=await contract.getFile();
+   outflag=1;
  }else{
    console.log("文件已经存在")
  }
@@ -156,6 +160,7 @@ hashExistorNot= async () =>{
             if(existhashs[i][0]===currenthash){
               flag = 0;
               alert("该文件已经存在,所有者为"+existhashs[i][2])
+              outflag=0;
               return flag;
             }
       } 
@@ -211,41 +216,63 @@ handleclick=async(e)=>{
 }
   render() {
  
+    let date=moment().format("YYYY-MM-DD HH:mm") 
+  
     if (!this.state.web3) {
       return <div>Loading Web3, accounts, and contract...</div>;
     }else{
     
-    return (<div className="upload" align="center" id="upload" >
+    return (
+    <div className="upload" align="center" id="upload" >
+    
         <div className="select1">
            <div className="select2">
            <h3>当前账户：</h3>
             <span type="txt" size="50" ref="owner" id="owner" className="owner" >{this.state.accounts}</span>
            <h1><span>上传文件</span></h1>
             <input type="file" ref="file" id="file" className="file" multiple="multiple"/> <button onClick={this.uploadFiles}>提交文件</button>
-    
-            <br></br>
-            
+            <br></br>   
            </div>
        </div>
       <div className="displ">
-      {
-        
-        this.state.currentfilehash
-          ? <div id="out">   
-               <div id="lift" > 
-                  <h4>{"http://localhost:8080/ipfs/" + this.state.currentfilehash}</h4>                       
-                 {/* <ul>{this.state.filehashs.map(function(val){
-                      return <li >http://localhost:8080/ipfs/{val}</li>
-                  })}
-                  </ul>*/}
-                </div>
-              <div  id="right" >
+      {    
+       this.state.currentfilehash&&outflag
+          ? <div className="out">                 
+       
+                    <table boder="1" className="uploadtable">             
+                     <tbody>
+                          <tr>
+                             <td className="td1">文件名</td>   
+                             <td className="td2">{this.state.currentfilename}</td>                          
+                          </tr>
+                          <tr>
+                              <td className="td1">hash值</td>   
+                              <td className="td2">{this.state.currentfilehash}</td>                            
+                          </tr>
+                          <tr>
+                             <td className="td1">所有人</td>   
+                             <td className="td2">{this.state.currentfileowner}</td>                         
+                          </tr>
+                          <tr>
+                              <td className="td1">上传时间</td>   
+                              <td className="td2">{date}</td> 
+                        
+                          </tr>
+                          </tbody>
+                    </table>
+           
+
+            { /* <div  id="right" >
               <img alt="yjy" style={{
                   width: 200,height:200
                 }} src={"http://localhost:8080/ipfs/" + this.state.currentfilehash}/>
-               </div>
+               </div>*/}
+
             </div>
-          : <img alt="" />
+          : <div className="img">
+             
+            </div>
+          
       }
       </div>
     </div>);

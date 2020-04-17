@@ -1,7 +1,5 @@
 .upload{
-  
-
-    background-color: #bbffaa;
+    border: solid;
     height: 100%;
 }
 .outbox{
@@ -10,21 +8,56 @@
     top: 100px;
 }
 .select1{
-    float: left;
+
     position: relative;
-    height: 100%;
+    height: 40%;
     width: 50%;
-    background-color: brown;  
+   
 }
 .select2{
    position: relative;
-   top:100px;
+  
 }
 .displ{
-    float: right;
-    background-color: skyblue;
+   position: relative;
     width: 50%;
-    height: 100%;
+    height: 40%;
     margin:auto ;
 
+}
+.img{
+    position: relative;
+    height:100%;
+    width:100%
+    //background-image: url(../../../image/background.jpg);
+    
+}
+.out{
+    border: solid;
+}
+.uploadtable{
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    position: relative;
+
+    border-collapse: collapse;
+}
+.uploadtable::before,.uploadtable::after{
+    content:'';
+    display: table;
+    clear: both;
+}
+.td1{
+  
+    height: 60px;
+    vertical-align: middle;
+}
+
+.td2{
+    width: 60%;
+
+}
+tbody{
+    height: 100%;
 }

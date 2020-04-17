@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "antd": "^4.1.1",
+    "jquery": "^3.5.0",
+    "moment": "^2.24.0",
     "node-sass": "^4.13.1",
     "pubsub-js": "^1.8.0",
     "react": "16.11.0",

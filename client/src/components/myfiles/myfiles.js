@@ -6,7 +6,7 @@ import dataContain from "../dataContain"
 import getinstance from "../getWeb3/getinstance"
 import { Table, Button,message } from 'antd';
 import { DownloadOutlined } from '@ant-design/icons';
-import style from "./myfiles.scss"
+
 const ipfsAPI = require('ipfs-api');
 const ipfs = ipfsAPI({host: 'localhost', port: '5001', protocol: 'http'});
 //查询用户的所有文件,并且提供下载按钮
@@ -59,18 +59,18 @@ export default class myfiles extends Component {
     }
     fun2=()=>{
         var data= []
-        for(var i=0;i<dataContain.data[3].length;i++){  
-             console.log(dataContain.data[2]+"-----"+dataContain.data[3][i][2])       
-            if(dataContain.data[2]==dataContain.data[3][i][2]){
-              var temp={
-                key:i,
-                name: dataContain.data[3][i][1],
-                age: dataContain.data[3][i][0],
-                address: 'http://localhost:8080/ipfs/'+dataContain.data[3][i][0],
-              }
-              data[data.length]=temp;   
-              }
-         }
+        for(var i=0;i<this.props.files.length;i++){    
+          alert(this.props.account+"----"+this.props.files[i][2])
+            if(this.props.account==this.props.files[i][2]){         
+                  var temp={
+                    key:i,
+                    name: this.props.files[i][1],
+                    age: this.props.files[i][0],
+                    address: 'http://localhost:8080/ipfs/'+this.props.files[i][0],
+                  }
+                  data[data.length]=temp;    
+                }          
+          }
      setTimeout(()=>{
        this.setState({data:data})
       },1000)
@@ -78,19 +78,20 @@ export default class myfiles extends Component {
 
     componentWillMount = async () => {
       try {
+        
         var data= []
         if(this.state.data===null){
           this.fun2()
         }
           console.log("this myfiles 的初始化函数：")            
-          for(var i=0;i<dataContain.data[3].length;i++){    
-            console.log(dataContain.data[2]+"-----"+dataContain.data[3][i][2])
-            if(dataContain.data[2]==dataContain.data[3][i][2]){         
+          for(var i=0;i<this.props.files.length;i++){    
+          alert(this.props.account+"----"+this.props.account)
+            if(this.props.account==this.props.files[i][2]){         
                   var temp={
                     key:i,
-                    name: dataContain.data[3][i][1],
-                    age: dataContain.data[3][i][0],
-                    address: 'http://localhost:8080/ipfs/'+dataContain.data[3][i][0],
+                    name: this.props.files[i][1],
+                    age: this.props.files[i][0],
+                    address: 'http://localhost:8080/ipfs/'+this.props.files[i][0],
                   }
                   data[data.length]=temp;    
                 }          
@@ -99,12 +100,11 @@ export default class myfiles extends Component {
             contract: dataContain.data[0],//已经部署的合约放到state中
             web3:dataContain.data[1],
             accounts:dataContain.data[2],
-            filehashs:dataContain.data[3],
+            filehashs:this.props.files,
             data:data
           },()=>{
-            if(this.state.contract){
-         
-            console.log("这是data中的数据："+data)
+            if(this.state.filehashs){
+            alert("这是data中的数据："+data)
             }
           })        
          }catch (error) {
@@ -169,6 +169,7 @@ dowloadfile=async(event,api_url)=>{//下载文件
           title: '操作',
           key: 'action',
           render: (text, record) => (
+            
             <span>
               <Button type="primary" shape="round" icon={<DownloadOutlined />} size={'small'} onClick={e=>{this.dowloadfile(e,record.address.toString());return false}}></Button>
             </span>
@@ -179,6 +180,7 @@ dowloadfile=async(event,api_url)=>{//下载文件
 
         return (
             <div  className="myfiles" id="filebox" style={{overflow:'auto'}}>
+           
              <Table   pagination={{ position: [this.state.bottom] ,defaultPageSize:5}} tableLayout={'fixed'} size={'small'} defaultPageSize={6} columns={columns} dataSource={this.state.data} />
             </div>
 
