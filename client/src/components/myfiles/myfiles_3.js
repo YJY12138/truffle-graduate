@@ -6,7 +6,7 @@ import dataContain from "../dataContain"
 import getinstance from "../getWeb3/getinstance"
 import { Table, Button,message } from 'antd';
 import { DownloadOutlined } from '@ant-design/icons';
-
+import styles from "../myfiles/css/myfiles_3.scss"
 const ipfsAPI = require('ipfs-api');
 const ipfs = ipfsAPI({host: 'localhost', port: '5001', protocol: 'http'});
 //查询用户的所有文件,并且提供下载按钮
@@ -103,22 +103,17 @@ fun1 = async ()=>{
 
    }
   
-dowloadfile=async(event,api_url)=>{//下载文件
-    console.log('this is :'+api_url)
-    /*return new Promise((resolve,reject)=>{
-      try{
-          ipfs.get(hash,function (err,files) {
-              if (err || typeof files == "undefined") {
-                  reject(err);
-              }else{
-                  resolve(files[0].content);
-              }
-          })
-      }catch (ex){
-          reject(ex);
-      }
-  }); */ 
-  window.open(api_url)
+dowloadfile=async(event,url)=>{//下载文件
+    fetch(url).then(res => res.blob().then(blob => {
+      var a = document.createElement('a');
+      var url = window.URL.createObjectURL(blob);
+      var filename = 'file.png';
+      a.href = url;
+      a.download = filename;
+      a.click();
+      window.URL.revokeObjectURL(url);
+     }));
+ // window.open(api_url)
   message.success('下载成功')
  }
   componentWillReceiveProps = async () => {
@@ -167,12 +162,9 @@ dowloadfile=async(event,api_url)=>{//下载文件
 
         return (
             <div  className="myfiles" id="filebox" style={{overflow:'auto'}}>
-            <div>
-          { 
-
-          }          
-            </div>          
-             <Table   pagination={{ position: [this.state.bottom] ,defaultPageSize:5}} tableLayout={'fixed'} size={'small'} defaultPageSize={6} columns={columns} dataSource={this.state.data} />
+                <div className="mytable">        
+                <Table   pagination={{ position: [this.state.bottom] ,defaultPageSize:5}} tableLayout={'fixed'} size={'small'} defaultPageSize={6} columns={columns} dataSource={this.state.data} />
+                </div> 
             </div>
         )
     }

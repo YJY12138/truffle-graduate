@@ -8,7 +8,7 @@ import dataContain from '../dataContain'
 import { resolveOnChange } from 'antd/lib/input/Input';
 import ethaddress from '../test/ethAddress'
 import searchfile from '../test/searchfile'
-import style from './verify.scss'
+import style from './css/verify_3.scss'
 const ipfsAPI = require('ipfs-api');
 const ipfs = ipfsAPI({host: 'localhost', port: '5001', protocol: 'http'});
 //把文件存到ipfs
@@ -96,7 +96,7 @@ operateContract = async () => {
   console.log("这是长度 : "+response_1.length+"  这是存文件之前合约里的文件信息 :"+ response_1[response_1.length-1])
 
   if(await this.hashExistorNot()===1){//当前文件还未存链
-    alert("文件未存在系统")
+    message.success("文件未存在系统")
   }else{
     
   }
@@ -151,7 +151,7 @@ hashExistorNot= async () =>{
     for(var i=0;i<existhashs.length;i++){
           if(existhashs[i][0]===currenthash){
             flag = 0;
-            alert("该文件已经存在,所有者为"+existhashs[i][2])
+            message.success("该文件已经存在,所有者为"+existhashs[i][2])
             return flag;
           }
     } 
@@ -177,7 +177,7 @@ uploadFiles = async ()=>{
   // reader.readAsDataURL(file);
   if(await file!=null)
    reader.readAsArrayBuffer(file)
-  else alert("请先选择文件")
+  else message.success("请先选择文件")
   reader.onloadend = (e) => {
     console.log('这是reader')
     console.log(reader);
@@ -213,30 +213,14 @@ handleclick=async(e)=>{
     }else{
     
     return (<div className="verify" align="center" id="verify" >
-      
+      <div className="verifycontent">
         <h1><span>验证文件</span></h1>
            <h3><span>选择文件</span></h3>
            <div>
             <input type="file" ref="file" id="file" name="file" multiple="multiple"/>
             <button onClick={this.uploadFiles}>提交文件</button>
            </div>
-
-      {/*
-        //如果拿到了图片存在ipfs的hash就显示链接,否则不显示
-        this.state.currentfilehash
-          ? <div id="out">   
-               <div id="lift" > 
-                  <h4>{"http://localhost:8080/ipfs/" + this.state.currentfilehash}</h4>
-                </div>
-                
-              <div  id="right" >
-              <img alt="yjy" style={{
-                  width: 200,height:200
-                }} src={"http://localhost:8080/ipfs/" + this.state.currentfilehash}/>
-               </div>
-            </div>
-          : <img alt="" />
-     */}
+     </div>
     </div>);
   }
 }

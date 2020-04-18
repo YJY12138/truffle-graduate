@@ -7,6 +7,8 @@ import { Button ,message} from 'antd';
 import dataContain from '../dataContain'
 import { resolveOnChange } from 'antd/lib/input/Input';
 import ethaddress from '../test/ethAddress'
+import Myfiles from "../myfiles/myfiles"
+import Verify from "../verify/verify"
 import searchfile from '../test/searchfile'
 import style from "./css/uploadcss.scss"
 import moment from 'moment';
@@ -58,18 +60,18 @@ fun2=()=>{
 componentWillMount = async () => {
   try {  
        if(this.state.contract===null){
-        await this.fun2()
+         this.fun2()
        }
           this.setState({
-          contract: dataContain.data[0],//已经部署的合约放到state中
-          web3:     dataContain.data[1],
-          accounts: dataContain.data[2],
-          filehashs:dataContain.data[3],
-          filecounts:dataContain.data[3].length
+          contract:  this.props.contract,//已经部署的合约放到state中
+          web3:      this.props.web3,
+          accounts:  this.props.account,
+          filehashs: this.props.files,
+         //filecounts:this.props.files.length
         },
           () => {
             if(this.state.contract){
-            console.log('这是upload中设置完state之后的回调函数')
+            console.log('这是upload中收到的参数')
             console.log('contract address :' + this.state.contract.address)
             console.log('web3             :' + this.state.web3)
             console.log('accounts         :' + this.state.accounts)
@@ -88,10 +90,10 @@ componentWillMount = async () => {
 operateContract = async () => {
   console.log('进入operateContract')
   const contract = dataContain.data[0] //我们已经部署好的合约,{账户,合约}
-  console.log('this is contract :' + contract)
+  console.log('this is contract :' + this.props.contract)
   const accounts = dataContain.data[2]
-  console.log('this is accounts :' + accounts)
-  this.fun1()
+  console.log('this is accounts :' + this.props.account)
+  //this.fun1()
 
   //先拿到合约里面的文件信息,看是否存在当前的hash
   var response_1 = await contract.getFile()
@@ -102,7 +104,7 @@ operateContract = async () => {
    await this.state.contract.setFilemsg(this.state.currentfilehash.toString(),this.state.currentfilename.toString(),this.state.currentfileowner.toString(),
                          { from: this.state.currentfileowner.toString()}
                          )//默认指定第0个账户可以加上第二个参数{from:accounts[0]}
-   await message.success('上传成功')
+   message.success('上传成功')
    dataContain.data[3]=await contract.getFile();
    outflag=1;
  }else{
@@ -114,7 +116,7 @@ operateContract = async () => {
 
   const transaction=this.state.web3.eth.getTransaction(this.state.blockNumber, 0).then(
                                              data=>{if(data!=null)
-                                                     console.log(data)
+                                                     console.log("这是本次transaction："+data)
                                                     else console.log('data为空')
                                                     }
                                                   )
@@ -141,7 +143,7 @@ operateContract = async () => {
       console.log('-----------------------------------------------')
     }
   )
- // this.getTrans()
+ this.getTrans()
 }
 hashExistorNot= async () =>{
     
@@ -197,10 +199,7 @@ uploadFiles = async ()=>{
 }
 fun1 = async ()=>{
  
-   console.log("查看dataContain中的信息 :"+dataContain.data[0])
-   console.log("查看dataContain中的信息 :"+dataContain.data[1])
-   console.log("查看dataContain中的信息 :"+dataContain.data[2])
-   console.log("查看dataContain中的信息 :"+dataContain.data[3])
+   
    if(!dataContain.data){
         const instance = await getinstance();
         dataContain.data =instance;
@@ -224,7 +223,7 @@ handleclick=async(e)=>{
     
     return (
     <div className="upload" align="center" id="upload" >
-    
+     <div className="uploadself">
         <div className="select1">
            <div className="select2">
            <h3>当前账户：</h3>
@@ -234,48 +233,52 @@ handleclick=async(e)=>{
             <br></br>   
            </div>
        </div>
-      <div className="displ">
-      {    
-       this.state.currentfilehash&&outflag
-          ? <div className="out">                 
-       
-                    <table boder="1" className="uploadtable">             
-                     <tbody>
-                          <tr>
-                             <td className="td1">文件名</td>   
-                             <td className="td2">{this.state.currentfilename}</td>                          
-                          </tr>
-                          <tr>
-                              <td className="td1">hash值</td>   
-                              <td className="td2">{this.state.currentfilehash}</td>                            
-                          </tr>
-                          <tr>
-                             <td className="td1">所有人</td>   
-                             <td className="td2">{this.state.currentfileowner}</td>                         
-                          </tr>
-                          <tr>
-                              <td className="td1">上传时间</td>   
-                              <td className="td2">{date}</td> 
-                        
-                          </tr>
-                          </tbody>
-                    </table>
-           
 
-            { /* <div  id="right" >
-              <img alt="yjy" style={{
-                  width: 200,height:200
-                }} src={"http://localhost:8080/ipfs/" + this.state.currentfilehash}/>
-               </div>*/}
-
-            </div>
-          : <div className="img">
-             
-            </div>
+          <div className="displ">
+          {    
+          this.state.currentfilehash&&outflag
+              ? <div className="out">                 
           
-      }
-      </div>
-    </div>);
+                        <table boder="1" className="uploadtable">             
+                        <tbody>
+                              <tr>
+                                <td className="td1">文件名</td>   
+                                <td className="td2">{this.state.currentfilename}</td>                          
+                              </tr>
+                              <tr>
+                                  <td className="td1">hash值</td>   
+                                  <td className="td2">{this.state.currentfilehash}</td>                            
+                              </tr>
+                              <tr>
+                                <td className="td1">所有人</td>   
+                                <td className="td2">{this.state.currentfileowner}</td>                         
+                              </tr>
+                              <tr>
+                                  <td className="td1">上传时间</td>   
+                                  <td className="td2">{date}</td> 
+                            
+                              </tr>
+                              </tbody>
+                        </table>
+              
+
+                { /* <div  id="right" >
+                  <img alt="yjy" style={{
+                      width: 200,height:200
+                    }} src={"http://localhost:8080/ipfs/" + this.state.currentfilehash}/>
+                  </div>*/}
+                </div>
+              : <div className="img">               
+                </div>        
+          }
+          </div>
+       </div>
+          <div  className="other">
+            <div className="div2" id="div2"><Myfiles files={this.state.filehashs} account={this.state.accounts} contract={this.state.contract} web3={this.state.web3}></Myfiles></div>
+            <div className="div3" id="div3"><Verify  files={this.state.filehashs} account={this.state.accounts}></Verify></div>
+          </div>
+    </div>
+    );
   }
 }
 }

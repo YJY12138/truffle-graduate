@@ -1,18 +1,17 @@
 import React, { Component } from 'react'
 import {HashRouter,Route,Link,BrowserRouter,Switch,Redirect} from 'react-router-dom';
-import createBrowserHistory from "history/createBrowserHistory";
-import Myfiles from "../myfiles/myfiles"
-import Upload from "../upload/upload"
-import Verify from "../verify/verify"
+import Upload from "../upload/upload_3"
 import getinstance from '../getWeb3/getinstance'
 import Welcome from "../welcome/welcome"
 import {Layout, Menu, Button }from 'antd'
-import styles from '../../components/layouts/css/layout.scss'
+import styles from '../../components/layouts/css/layout_3.scss'
 import 'antd/dist/antd.css'
 import dataContain from '../dataContain'
 import $ from  'jquery'
-const {Header, Footer, Content } = Layout;
-const customHistory = createBrowserHistory();
+
+
+
+
 var instance
 export default class layout extends Component {
     constructor(props){
@@ -65,7 +64,7 @@ export default class layout extends Component {
       　　var t=e.offsetTop;
       　　var l=e.offsetLeft;
       　　while(e=e.offsetParent){
-      　　　　t+=e.offsetTop-40;
+      　　　　t+=e.offsetTop;
       　　　　l+=e.offsetLeft;
       　　}
       　$("html,body").animate({scrollTop:t},300);
@@ -73,22 +72,25 @@ export default class layout extends Component {
     render() {
         return (
           <div className="outer">
-            <div className="divlayout">
-              <ul  className="nav">
-                 <li className="li1" ><a href="#" onClick={(e)=>{this.handleclick("div1",e)}}>上传</a></li>
-                 <li><a href="#" onClick={(e)=>{this.handleclick("div2",e)}}>文件</a></li>
-                 <li><a href="#" onClick={(e)=>{this.handleclick("div3",e)}}>验证</a></li>
-              </ul>
-          {/*<div className="layout-upload"><Button  className="but" type="primary" onClick={(e)=>{this.handleclick("div1",e)}}>上传文件</Button></div>
-             <div className="layout-myfile"><Button  className="but" type="primary" onClick={(e)=>{this.handleclick("div2",e)}}>我的文件</Button></div>
-             <div className="layout-verify"><Button  className="but" type="primary" onClick={(e)=>{this.handleclick("div3",e)}}>文件验权</Button></div>
-            */}  
-            </div>
-            <div className="accountinfo">{this.state.accounts}</div>
-           
-            <div className="contents">
-            <div className="div1" id="div1"><Upload  files={this.state.filehashs} account={this.state.accounts} contract={this.state.contract} web3={this.state.web3} changestate={this.changstate}></Upload></div>
-            </div>
+            
+              <div className="divlayout">
+                <ul  className="nav">
+                  <li className="li1" ><a href="#" onClick={(e)=>{this.handleclick("div1",e)}}> <p><span class="bg"></span><span class="base"></span><span class="text">上传文件</span></p></a></li>
+                  <li><a href="#" onClick={(e)=>{this.handleclick("div2",e)}}> <p><span class="bg"></span><span class="base"></span><span class="text">文件列表</span></p></a></li>
+                  <li><a href="#" onClick={(e)=>{this.handleclick("div3",e)}}> <p><span class="bg"></span><span class="base"></span><span class="text">文件验权</span></p></a></li>
+                </ul>        
+              </div>
+
+               <div className="accountinfo">
+               <span><h3>当前账户：{this.state.accounts}</h3></span>
+               </div>
+
+              <div className="contents">
+              <div className="div1" id="div1"><Upload  files={this.state.filehashs} account={this.state.accounts} contract={this.state.contract} web3={this.state.web3} changestate={this.changstate}></Upload></div>
+              </div>
+              <div className="footer">
+                        <span><h1>create by yjy</h1></span>
+              </div>
            
           </div>
         )
